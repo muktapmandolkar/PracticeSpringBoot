@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                <h1>NakNih Softlabs Pvt Ltd</h1>
+            </div>
+            <div class="nav-links">
+                <a href="#dashboard" class="nav-link active"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="#students" class="nav-link"><i class="fas fa-users"></i> Students</a>
+                <a href="#add-student" class="nav-link"><i class="fas fa-user-plus"></i> Add Student</a>
+                <a href="#statistics" class="nav-link"><i class="fas fa-chart-bar"></i> Statistics</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="section active">
+            <div class="dashboard-header">
+                <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+                <div class="stats-cards">
+                    <div class="stat-card total">
+                        <i class="fas fa-users"></i>
+                        <div>
+                            <h3 id="totalStudents">0</h3>
+                            <p>Total Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card active">
+                        <i class="fas fa-user-check"></i>
+                        <div>
+                            <h3 id="activeStudents">0</h3>
+                            <p>Active Students</p>
+                        </div>
+                    </div>
+                    <div class="stat-card gpa">
+                        <i class="fas fa-chart-line"></i>
+                        <div>
+                            <h3 id="averageGPA">0.0</h3>
+                            <p>Average GPA</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quick-actions">
+                <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="btn-primary" onclick="showSection('add-student')">
+                        <i class="fas fa-user-plus"></i> Add New Student
+                    </button>
+                    <button class="btn-secondary" onclick="loadStudents()">
+                        <i class="fas fa-sync"></i> Refresh Students
+                    </button>
+                    <button class="btn-info" onclick="showSection('statistics')">
+                        <i class="fas fa-chart-pie"></i> View Statistics
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Students List Section -->
+        <section id="students" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-users"></i> All Students</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Search students by name...">
+                    <button onclick="searchStudents()"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="studentsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Course</th>
+                            <th>Year</th>
+                            <th>GPA</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentsTableBody">
+                        <!-- Students will be loaded here -->
+                    </tbody>
+                </table>
+                <div class="no-data" id="noStudentsMessage">
+                    <i class="fas fa-user-graduate"></i>
+                    <p>No students found. Add your first student!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Student Section -->
+        <section id="add-student" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-user-plus"></i> Add New Student</h2>
+            </div>
+            
+            <div class="form-container">
+                <form id="addStudentForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName"><i class="fas fa-user"></i> First Name *</label>
+                            <input type="text" id="firstName" required placeholder="Enter first name">
+                            <div class="error" id="firstNameError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName"><i class="fas fa-user"></i> Last Name *</label>
+                            <input type="text" id="lastName" required placeholder="Enter last name">
+                            <div class="error" id="lastNameError"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email"><i class="fas fa-envelope"></i> Email Address *</label>
+                        <input type="email" id="email" required placeholder="student@institute.edu">
+                        <div class="error" id="emailError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone"><i class="fas fa-phone"></i> Phone Number</label>
+                        <input type="tel" id="phone" placeholder="10-digit phone number">
+                        <div class="error" id="phoneError"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="course"><i class="fas fa-book"></i> Course *</label>
+                            <select id="course" required>
+                                <option value="">Select Course</option>
+                                <option value="Computer Science">Computer Science</option>
+                                <option value="Electrical Engineering">Electrical Engineering</option>
+                                <option value="Mechanical Engineering">Mechanical Engineering</option>
+                                <option value="Civil Engineering">Civil Engineering</option>
+                                <option value="Business Administration">Business Administration</option>
+                                <option value="Medicine">Medicine</option>
+                                <option value="Law">Law</option>
+                                <option value="Arts">Arts</option>
+                            </select>
+                            <div class="error" id="courseError"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="year"><i class="fas fa-calendar-alt"></i> Year *</label>
+                            <select id="year" required>
+                                <option value="">Select Year</option>
+                                <option value="1">First Year</option>
+                                <option value="2">Second Year</option>
+                                <option value="3">Third Year</option>
+                                <option value="4">Fourth Year</option>
+                                <option value="5">Fifth Year</option>
+                            </select>
+                            <div class="error" id="yearError"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gpa"><i class="fas fa-star"></i> GPA *</label>
+                        <input type="number" id="gpa" step="0.1" min="0" max="4" required placeholder="0.0 - 4.0">
+                        <div class="gpa-slider">
+                            <input type="range" id="gpaSlider" min="0" max="40" value="0" oninput="updateGPA(this.value/10)">
+                            <div class="gpa-labels">
+                                <span>0.0</span>
+                                <span>1.0</span>
+                                <span>2.0</span>
+                                <span>3.0</span>
+                                <span>4.0</span>
+                            </div>
+                        </div>
+                        <div class="error" id="gpaError"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Add Student
+                        </button>
+                        <button type="reset" class="btn-secondary">
+                            <i class="fas fa-redo"></i> Reset Form
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section id="statistics" class="section">
+            <div class="section-header">
+                <h2><i class="fas fa-chart-bar"></i> Statistics</h2>
+                <button class="btn-primary" onclick="loadStatistics()">
+                    <i class="fas fa-sync"></i> Refresh Stats
+                </button>
+            </div>
+
+            <div class="stats-container">
+                <div class="stat-card-large">
+                    <h3><i class="fas fa-chart-pie"></i> Overview</h3>
+                    <div class="stat-content">
+                        <div class="stat-item">
+                            <span>Total Students</span>
+                            <strong id="statTotal">0</strong>
+                        </div>
+                        <div class="stat-item">
+                            <span>Active Students</span>
+                            <strong id="statActive">0</strong>
+                        </div>
+                        <div class="stat-item">
+                            <span>Average GPA</span>
+                            <strong id="statGPA">0.0</strong>
+                        </div>
+                        <div class="stat-item">
+                            <span>Last Updated</span>
+                            <strong id="statTimestamp">-</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <h3><i class="fas fa-chart-line"></i> GPA Distribution</h3>
+                    <div class="gpa-distribution">
+                        <div class="gpa-bar excellent" id="gpaExcellent">Excellent (3.5-4.0)</div>
+                        <div class="gpa-bar good" id="gpaGood">Good (3.0-3.49)</div>
+                        <div class="gpa-bar average" id="gpaAverage">Average (2.5-2.99)</div>
+                        <div class="gpa-bar below" id="gpaBelow">Below Avg (0-2.49)</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal for Edit Student -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Student</h3>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="editModalBody">
+                <!-- Edit form will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <span id="toastMessage">Student added successfully!</span>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loadingSpinner" class="loading-spinner">
+        <div class="spinner"></div>
+        <p>Loading...</p>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
